@@ -5,6 +5,8 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
+import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
+import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
@@ -71,7 +73,7 @@ export default function Header({ user }: Props) {
             {`ToEisenhoDo ${user ? " - " + user?.displayName : ""}`}
           </Typography>
           <Button color="inherit" onClick={() => handleLogout(auth, user)}>
-            {user ? "Logout" : "Login"}
+            {user ? <PersonOffOutlinedIcon /> : <PermIdentityOutlinedIcon />}
           </Button>
         </Toolbar>
       </AppBar>
