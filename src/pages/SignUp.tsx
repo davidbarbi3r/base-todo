@@ -9,17 +9,20 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../components/Header";
 import { auth } from "../config/config";
 import logging from "../config/logging";
-import { User } from "firebase/auth";
+import { AuthError, User } from "firebase/auth";
 import { useState } from "react";
+import { Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
 interface Props {
-  user: User | null
+  user: User | null;
 }
 
-export default function Login({user}:Props) {
-  const [errorMsg, setErrorMsg] = useState<boolean>(false)
+export default function Login({ user }: Props) {
+  const [errorMsg, setErrorMsg] = useState<boolean>(false);
+  const navigate = useNavigate()
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -36,19 +39,19 @@ export default function Login({user}:Props) {
         .then(async (userAuth) => {
           await userAuth.user?.updateProfile({
             displayName: data.get("pseudo")?.toString(),
-          });
+          }).then(() => navigate("/"))
           logging.info(
             `Hello ${userAuth.user?.displayName}, you're Successfuly registered`
           );
         });
     } catch {
-      (error: any) => {
-        logging.error(error)
-        setErrorMsg(true)
-      }
-
+      (error: AuthError) => {
+        setErrorMsg(true);
+        logging.error(error.name);
+      };
     }
   };
+  console.log(errorMsg)
 
   return (
     <>
@@ -64,6 +67,12 @@ export default function Login({user}:Props) {
               alignItems: "center",
             }}
           >
+            <Typography variant="h4" gutterBottom>
+              Sign Up
+            </Typography>
+            <Typography color="textSecondary" align="center">
+              Welcome to ToEisenhoDo, let's create an account!
+            </Typography>
             <Box
               component="form"
               noValidate
@@ -118,7 +127,7 @@ export default function Login({user}:Props) {
                     Already have an account? Sign in
                   </Link>
                 </Grid>
-                <span>{errorMsg && "Email or Password incorect"}</span>
+                {errorMsg ? <Typography>"Email or Password incorect"</Typography> : ""}
               </Grid>
             </Box>
           </Box>

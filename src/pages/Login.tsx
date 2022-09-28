@@ -13,6 +13,7 @@ import { auth } from "../config/config";
 import logging from "../config/logging";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Typography } from "@mui/material";
 
 const theme = createTheme();
 
@@ -26,17 +27,18 @@ export default function SignIn({ user }: Props) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user = {
+    const logUser = {
       email: data.get("email")?.toString(),
       password: data.get("password")?.toString(),
     };
     try {
       auth
         .signInWithEmailAndPassword(
-          user.email ? user.email : "",
-          user.password ? user.password : ""
+          logUser.email ? logUser.email : "",
+          logUser.password ? logUser.password : ""
         )
-        .then(() => navigate("/"));
+        .then(() => navigate("/"))
+        .then(() => logging.info(`Hi, nice to see you back!`))
     } catch {
       (error: any) => {
         logging.error(error)
@@ -59,6 +61,8 @@ export default function SignIn({ user }: Props) {
               alignItems: "center",
             }}
           >
+            <Typography variant="h4" gutterBottom>Login</Typography>
+            <Typography color="textSecondary" align="center">Welcome to ToEisenhoDo, please login to enter in the app</Typography>
             <Box
               component="form"
               onSubmit={handleSubmit}
@@ -94,11 +98,6 @@ export default function SignIn({ user }: Props) {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
-                  <Link href="#" variant="body2">
-                    Forgot password?
-                  </Link>
-                </Grid>
                 <Grid item>
                   <Link href="/signup" variant="body2">
                     {"Don't have an account? Sign Up"}
