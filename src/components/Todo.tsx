@@ -9,6 +9,7 @@ import {
   ListItemText,
   Chip,
   Checkbox,
+  Typography,
 } from "@mui/material";
 import ITodo from "../interface/todo";
 import EditIcon from "@mui/icons-material/Edit";
@@ -57,10 +58,9 @@ export default function DisplayTodo({ todo }: Props) {
               <ListItemText
                 sx={todo.done? {textDecoration: "line-through"} : {}}
                 primary={todo.text}
-                secondary={
-                  todo.echeanceDate ? todo.echeanceDate?.toString() : ""
-                }
-              ></ListItemText>
+                secondary=""
+              >
+              </ListItemText>
               {todo.important && (
                 <Chip
                   sx={{ marginRight: "2em" }}
