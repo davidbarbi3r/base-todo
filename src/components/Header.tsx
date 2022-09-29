@@ -1,17 +1,11 @@
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { User, Auth, signOut, getAuth } from "firebase/auth";
+import {AppBar, Box, Toolbar, Typography, Button, Menu, MenuItem} from "@mui/material";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
-import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { User, Auth, signOut, getAuth } from "firebase/auth";
 
 interface Props {
   user: User | null;
@@ -69,9 +63,12 @@ export default function Header({ user }: Props) {
               {user ? "Logout" : "Login"}
             </MenuItem>
           </Menu>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {`ToEisenhoDo ${user ? " - " + user?.displayName : ""}`}
-          </Typography>
+          <Box sx={{ flexGrow: 1, display: "flex", alignItems:"baseline" }}>
+            <Typography variant="h6" component="div">
+              ToEisenhoDo 
+            </Typography>
+            {user?.displayName && <Typography marginLeft={2} variant="body2">{user?.displayName}</Typography>}
+          </Box>
           <Button color="inherit" onClick={() => handleLogout(auth, user)}>
             {user ? <PersonOffOutlinedIcon /> : <PermIdentityOutlinedIcon />}
           </Button>
