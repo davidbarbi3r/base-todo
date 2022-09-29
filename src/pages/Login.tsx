@@ -131,12 +131,16 @@ export default function SignIn({ user }: Props) {
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-                <Typography>{errorLoginMsg && errorLoginMsg}</Typography>
+                <Typography variant="subtitle2">{errorLoginMsg && errorLoginMsg}</Typography>
               </Grid>
             </Box>
-            <Button onClick={handleOpen} type="submit" variant="text">
-              Password forgotten ? Reset password
-            </Button>
+            <Grid container>
+              <Grid item>
+                <Link variant="body2" sx={{cursor: "pointer"}} onClick={handleOpen}>
+                  {"Password forgotten ? Reset password"}
+                </Link>
+              </Grid>
+            </Grid>
             <Modal
               open={open}
               onClose={handleClose}
@@ -166,6 +170,7 @@ export default function SignIn({ user }: Props) {
                   <Button variant="contained" type="submit">
                     Send reset Email
                   </Button>
+                  <Typography variant="subtitle2">{errorResetMsg && errorResetMsg}</Typography>
                 </Box>
               </Box>
             </Modal>
