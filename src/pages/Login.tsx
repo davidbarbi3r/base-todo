@@ -1,11 +1,4 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Header from "../components/Header";
 import { User } from "firebase/auth";
@@ -13,38 +6,74 @@ import { auth } from "../config/config";
 import logging from "../config/logging";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { Typography } from "@mui/material";
+import {
+  Typography,
+  Link,
+  Grid,
+  Box,
+  Container,
+  TextField,
+  CssBaseline,
+  Button,
+  Modal,
+} from "@mui/material";
 
 const theme = createTheme();
+
+const style = {
+  position: "absolute" as "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 
 interface Props {
   user: User | null;
 }
 
 export default function SignIn({ user }: Props) {
-  const [errorMsg, setErrorMsg] = useState<string | null>(null)
+  const [errorLoginMsg, setLoginErrorMsg] = useState<string | null>(null);
+  const [errorResetMsg, setErrorResetMsg] = useState<string | null>(null)
+  const [open, setOpen] = React.useState(false);
+  const [resetEmail, setResetEmail] = useState<string>("");
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const navigate = useNavigate();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const handleLoginSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const logUser = {
       email: data.get("email")?.toString(),
       password: data.get("password")?.toString(),
     };
-    try {
-      auth
-        .signInWithEmailAndPassword(
-          logUser.email ? logUser.email : "",
-          logUser.password ? logUser.password : ""
-        )
-        .then(() => navigate("/"))
-        .then(() => logging.info(`Hi, nice to see you back!`))
-    } catch {
-      (error: any) => {
-        logging.error(error)
-        setErrorMsg(error.message)
-      }
-    }
+    auth
+      .signInWithEmailAndPassword(
+        logUser.email ? logUser.email : "",
+        logUser.password ? logUser.password : ""
+      )
+      .then(() => navigate("/"))
+      .then(() => logging.info(`Hi, nice to see you back!`))
+      .catch((error: any) => {
+        logging.error(error);
+        setLoginErrorMsg(error.message);
+      });
+  };
+
+  const handleResetSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    auth
+      .sendPasswordResetEmail(resetEmail)
+      .then(() => console.log("Email Sent to : " + resetEmail))
+      .catch((error) => {
+        logging.error(error);
+        setErrorResetMsg(error.message);
+      });
   };
 
   return (
@@ -61,14 +90,13 @@ export default function SignIn({ user }: Props) {
               alignItems: "center",
             }}
           >
-            <Typography variant="h4" gutterBottom>Login</Typography>
-            <Typography color="textSecondary" align="center">Welcome to ToEisenhoDo, please login to enter in the app</Typography>
-            <Box
-              component="form"
-              onSubmit={handleSubmit}
-              noValidate
-              sx={{ mt: 1 }}
-            >
+            <Typography variant="h4" gutterBottom>
+              Login
+            </Typography>
+            <Typography color="textSecondary" align="center">
+              Welcome to ToEisenhoDo, please login to enter in the app
+            </Typography>
+            <Box component="form" onSubmit={handleLoginSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -103,9 +131,44 @@ export default function SignIn({ user }: Props) {
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
-                <span>{errorMsg && errorMsg}</span>
+                <Typography>{errorLoginMsg && errorLoginMsg}</Typography>
               </Grid>
             </Box>
+            <Button onClick={handleOpen} type="submit" variant="text">
+              Password forgotten ? Reset password
+            </Button>
+            <Modal
+              open={open}
+              onClose={handleClose}
+              aria-labelledby="modal-modal-title"
+              aria-describedby="modal-modal-description"
+            >
+              <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                  Reset Password
+                </Typography>
+                <Box
+                  component="form"
+                  sx={{ mt: 1 }}
+                  onSubmit={handleResetSubmit}
+                >
+                  <TextField
+                    onChange={(e) => setResetEmail(e.currentTarget.value)}
+                    margin="normal"
+                    required
+                    fullWidth
+                    type="email"
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    autoFocus
+                  />
+                  <Button variant="contained" type="submit">
+                    Send reset Email
+                  </Button>
+                </Box>
+              </Box>
+            </Modal>
           </Box>
         </Container>
       </ThemeProvider>

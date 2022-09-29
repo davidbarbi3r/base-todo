@@ -1,8 +1,10 @@
-import { AppBar, Box, CssBaseline, List, Toolbar, Typography } from "@mui/material";
-import EventNoteOutlinedIcon from '@mui/icons-material/EventNoteOutlined';
-import { useEffect, useState } from "react";
-import CreateTodo from "../components/CreateTodo";
-import DisplayTodo from "../components/DisplayTodo";
+import { AppBar, Box, CssBaseline, List, Toolbar, Typography, Accordion,
+  AccordionSummary,
+  AccordionDetails, } from "@mui/material";
+  import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+  import { useEffect, useState } from "react";
+import CreateTodo from "../components/CreateTodoForm";
+import DisplayTodo from "../components/Todo";
 import Header from "../components/Header";
 import ITodo from "../interface/todo";
 import { User } from "firebase/auth";
@@ -34,8 +36,16 @@ export default function TodoApp({ user }: Props) {
     return unsub
   }, []);
 
-  const todoDisplay = todos
+  const todosDisplay = todos
     .sort((a, b) => b.creationDate - a.creationDate)
+    .filter((todo) => !todo.done)
+    .map((todo) => (
+      <DisplayTodo todo={todo} key={todo.id} />
+    ));
+
+  const doneTodosDisplay = todos
+    .sort((a, b) => b.creationDate - a.creationDate)
+    .filter((todo) => todo.done)
     .map((todo) => (
       <DisplayTodo todo={todo} key={todo.id} />
     ));
@@ -47,7 +57,32 @@ export default function TodoApp({ user }: Props) {
         user={user}
         todos={todos}
       />
-      <List>{todoDisplay}</List>
+      <Accordion sx={{margin: 3}} expanded={todos.filter((todo) => !todo.done).length ? true : false}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Todos</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List>{todosDisplay}</List>
+        </AccordionDetails>
+      </Accordion>
+      
+      <Accordion sx={{margin: 3}}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Done todos</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <List>{doneTodosDisplay}</List>
+        </AccordionDetails>
+      </Accordion>
+      
     </Box>
   );
 }
