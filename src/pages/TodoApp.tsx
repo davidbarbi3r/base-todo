@@ -8,6 +8,9 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
+  InputLabel,
+  FormControl,
+  NativeSelect,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useEffect, useState } from "react";
@@ -48,6 +51,7 @@ export default function TodoApp({ user }: Props) {
         dayjs(a.creationDate, "DD/MM/YYYY HH/mm/ss").toDate().valueOf()
     )
     .filter((todo) => !todo.done)
+    .filter((todo) => typeFilter ? todo.type === typeFilter : !todo.done)
     .map((todo) => <DisplayTodo todo={todo} key={todo.id} />);
 
   const doneTodosDisplay = todos
@@ -75,6 +79,20 @@ export default function TodoApp({ user }: Props) {
           <Typography>Todos</Typography>
         </AccordionSummary>
         <AccordionDetails>
+        <FormControl>
+            <InputLabel variant="outlined" htmlFor="uncontrolled-native">
+              Type filter
+            </InputLabel>
+            <NativeSelect
+              defaultValue=""
+              onChange={(e) => setTypeFilter(e.currentTarget.value)}
+             >
+              <option value=""></option>
+              <option value="work">Work</option>
+              <option value="home">Home</option>
+              <option value="other">Other</option>
+            </NativeSelect>
+          </FormControl>
           <List>{todosDisplay}</List>
         </AccordionDetails>
       </Accordion>
