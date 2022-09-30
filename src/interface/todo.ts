@@ -1,5 +1,3 @@
-import {Dayjs} from "dayjs"
-
 export default interface ITodo {
     userId: string
     text: string | undefined

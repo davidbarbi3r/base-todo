@@ -94,7 +94,7 @@ export default function SignIn({ user }: Props) {
               Login
             </Typography>
             <Typography color="textSecondary" align="center">
-              Welcome to ToEisenhoDo, please login to enter in the app.
+              Welcome to Base Todo, please login to enter in the app.
             </Typography>
             <Grid border="ButtonShadow">
             <Typography color="textSecondary" align="center">

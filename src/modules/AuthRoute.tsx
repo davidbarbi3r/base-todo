@@ -13,8 +13,7 @@ const AuthRoute = (props: IAuthRouteProps) => {
 
   useEffect(() => {
     const AuthCheck = onAuthStateChanged(auth, (user) => {
-      if (user) {
-      } else {
+      if (!user) {
         logging.warn("Unauthorized, you have to login");
         navigate("/login");
       }

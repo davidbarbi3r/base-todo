@@ -17,6 +17,8 @@ function App() {
   return (
     <>
       <Routes>
+        <Route path="/login" element={<Login user={user} />} />
+        <Route path="/signup" element={<SignUp user={user} />} />
         <Route
           path="/"
           element={
@@ -25,8 +27,6 @@ function App() {
             </AuthRoute>
           }
         />
-        <Route path="/login" element={<Login user={user} />} />
-        <Route path="/signup" element={<SignUp user={user} />} />
       </Routes>
     </>
   );
