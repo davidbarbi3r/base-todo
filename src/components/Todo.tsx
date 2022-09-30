@@ -59,12 +59,13 @@ export default function DisplayTodo({ todo }: Props) {
               <ListItemText
                 sx={todo.done? {textDecoration: "line-through"} : {}}
                 primary={todo.text}
-                secondary={`Creation date: ${todo.creationDate.split(" ")[0]} | Limit date: ${todo.echeanceDate?.split(' ')[0]}`}
+                secondary={`Limit date: ${todo.echeanceDate?.split(' ')[0]}`}
               >
               </ListItemText>
+              <Grid>
               {todo.important && (
                 <Chip
-                  sx={{ marginRight: "2em" }}
+                  sx={{ m: 1 }}
                   icon={<PriorityHighIcon />}
                   variant="outlined"
                   color="warning"
@@ -73,16 +74,15 @@ export default function DisplayTodo({ todo }: Props) {
                 />
               )}
               <Chip
-                  sx={{ marginRight: "2em" }}
+                  sx={{ m: 1 }}
                   variant="outlined"
                   color="info"
                   size="small"
                   label={todo.type as string}
                 />
+                </Grid>
             </>
           )}
-          <Grid display={"flex"} alignItems={"right"}></Grid>
-
           <ButtonGroup
             size="small"
             variant="outlined"
