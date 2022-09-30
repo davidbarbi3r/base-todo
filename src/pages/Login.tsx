@@ -94,8 +94,19 @@ export default function SignIn({ user }: Props) {
               Login
             </Typography>
             <Typography color="textSecondary" align="center">
-              Welcome to ToEisenhoDo, please login to enter in the app
+              Welcome to ToEisenhoDo, please login to enter in the app.
             </Typography>
+            <Grid border="ButtonShadow">
+            <Typography color="textSecondary" align="center">
+              If you want to test the app without creating an account you can use : 
+            </Typography>
+            <Typography color="textSecondary" align="center">
+              Email : test@test.com 
+            </Typography>
+            <Typography color="textSecondary" align="center">
+              Password : password 
+            </Typography>
+            </Grid>
             <Box component="form" onSubmit={handleLoginSubmit} sx={{ mt: 1 }}>
               <TextField
                 margin="normal"

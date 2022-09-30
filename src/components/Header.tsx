@@ -65,7 +65,7 @@ export default function Header({ user }: Props) {
           </Menu>
           <Box sx={{ flexGrow: 1, display: "flex", alignItems:"baseline" }}>
             <Typography variant="h6" component="div">
-              ToEisenhoDo 
+              Base Todo 
             </Typography>
             {user?.displayName && <Typography marginLeft={2} variant="body2">{user?.displayName}</Typography>}
           </Box>
