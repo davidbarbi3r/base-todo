@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import { database } from "../config/config";
 import logging from "../config/logging";
+import dayjs from "dayjs";
 
 interface Props {
   user: User | null;
@@ -23,6 +24,7 @@ interface Props {
 
 export default function TodoApp({ user }: Props) {
   const [todos, setTodos] = useState<ITodo[]>([]);
+  const [typeFilter, setTypeFilter] = useState<string>("")
 
   const queryTodos = user?.uid
     ? query(collection(database, "todos"), where("userId", "==", user?.uid))
@@ -37,14 +39,14 @@ export default function TodoApp({ user }: Props) {
   }, []);
 
   const todosDisplay = todos
-    .sort((a, b) => b.creationDate - a.creationDate)
+    .sort((a, b) => dayjs(b.creationDate).diff(dayjs(a.creationDate)))
     .filter((todo) => !todo.done)
     .map((todo) => (
       <DisplayTodo todo={todo} key={todo.id} />
     ));
 
   const doneTodosDisplay = todos
-    .sort((a, b) => b.creationDate - a.creationDate)
+    .sort((a, b) => dayjs(b.creationDate).diff(dayjs(a.creationDate)))
     .filter((todo) => todo.done)
     .map((todo) => (
       <DisplayTodo todo={todo} key={todo.id} />
