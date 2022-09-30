@@ -105,6 +105,7 @@ export default function CreateTodo({ user, todos }: Props) {
                   >
                     <FormControlLabel value="home" control={<Radio />} label="Home" />
                     <FormControlLabel value="work" control={<Radio />} label="Work" />
+                    <FormControlLabel value="other" control={<Radio />} label="Other" />
                   </RadioGroup>
                 </FormControl>
                 </Grid>

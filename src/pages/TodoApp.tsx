@@ -87,7 +87,7 @@ export default function TodoApp({ user }: Props) {
               defaultValue=""
               onChange={(e) => setTypeFilter(e.currentTarget.value)}
              >
-              <option value=""></option>
+              <option value="">All</option>
               <option value="work">Work</option>
               <option value="home">Home</option>
               <option value="other">Other</option>
