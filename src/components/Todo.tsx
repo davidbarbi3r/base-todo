@@ -58,7 +58,7 @@ export default function DisplayTodo({ todo }: Props) {
               <ListItemText
                 sx={todo.done? {textDecoration: "line-through"} : {}}
                 primary={todo.text}
-                secondary=""
+                secondary={`Limit date: ${todo.echeanceDate}  Type: ${todo.type}`}
               >
               </ListItemText>
               {todo.important && (
