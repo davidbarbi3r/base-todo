@@ -1,4 +1,4 @@
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { User } from "firebase/auth";
 import { useRef, useState } from "react";
 import DateInput from "./DateInput";
@@ -14,10 +14,15 @@ import {
   FormControlLabel,
   Box,
   Grid,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormLabel
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { crud } from "../controllers/CRUDcontrollers";
 import ITodo from "../interface/todo";
+import { DataArraySharp } from "@mui/icons-material";
 
 interface Props {
   user: User | null;
@@ -36,12 +41,13 @@ export default function CreateTodo({ user, todos }: Props) {
     const newTodo: ITodo = {
       userId: user ? user.uid : "",
       text: data.get("text") ? data.get("text")?.toString() : "",
-      creationDate: Date.now(),
-      echeanceDate: echeanceDate ? echeanceDate?.toDate() : null,
+      creationDate: dayjs(Date.now()).format("DD/MM/YYYY"),
+      echeanceDate: echeanceDate ? echeanceDate.format("DD/MM/YYYY") : null,
       done: false,
       important: data.get("important") ? true : false,
       urgent: data.get("urgent") ? true : false,
       id: `${todos.length}`,
+      type: data.get("type") ? data.get("type") : "other"
     };
 
     crud.create(newTodo);
@@ -88,6 +94,19 @@ export default function CreateTodo({ user, todos }: Props) {
                     label="Important task"
                     name="important"
                   />
+                </Grid>
+                <Grid item xs={4} sm={10}>
+                <FormControl>
+                  <FormLabel id="demo-row-radio-buttons-group-label">Todo Type</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-row-radio-buttons-group-label"
+                    name="type"
+                  >
+                    <FormControlLabel value="home" control={<Radio />} label="Home" />
+                    <FormControlLabel value="work" control={<Radio />} label="Work" />
+                  </RadioGroup>
+                </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={40}>
                 <DateInput

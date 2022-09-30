@@ -6,7 +6,8 @@ export default interface ITodo {
     important: boolean
     urgent: boolean
     done: boolean
-    creationDate: number
-    echeanceDate?: Date | null
+    creationDate: string
+    echeanceDate?: string | null
     id: string
+    type: FormDataEntryValue | null
 }
