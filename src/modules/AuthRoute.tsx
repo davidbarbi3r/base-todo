@@ -15,7 +15,7 @@ const AuthRoute = (props: IAuthRouteProps) => {
     const AuthCheck = onAuthStateChanged(auth, (user) => {
       if (!user) {
         logging.warn("Unauthorized, you have to login");
-        navigate("/#/login");
+        navigate("/login");
       }
     });
     return () => AuthCheck();
