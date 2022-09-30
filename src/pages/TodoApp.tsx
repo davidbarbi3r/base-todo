@@ -1,19 +1,22 @@
-import { AppBar, Box, CssBaseline, List, Toolbar, Typography, Accordion,
+import {
+  AppBar,
+  Box,
+  CssBaseline,
+  List,
+  Toolbar,
+  Typography,
+  Accordion,
   AccordionSummary,
-  AccordionDetails, } from "@mui/material";
-  import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-  import { useEffect, useState } from "react";
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useEffect, useState } from "react";
 import CreateTodo from "../components/CreateTodoForm";
 import DisplayTodo from "../components/Todo";
 import Header from "../components/Header";
 import ITodo from "../interface/todo";
 import { User } from "firebase/auth";
-import {
-  collection,
-  onSnapshot,
-  query,
-  where,
-} from "firebase/firestore";
+import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { database } from "../config/config";
 import logging from "../config/logging";
 import dayjs from "dayjs";
@@ -24,7 +27,7 @@ interface Props {
 
 export default function TodoApp({ user }: Props) {
   const [todos, setTodos] = useState<ITodo[]>([]);
-  const [typeFilter, setTypeFilter] = useState<string>("")
+  const [typeFilter, setTypeFilter] = useState<string>("");
 
   const queryTodos = user?.uid
     ? query(collection(database, "todos"), where("userId", "==", user?.uid))
@@ -32,34 +35,38 @@ export default function TodoApp({ user }: Props) {
 
   useEffect(() => {
     const unsub = onSnapshot(queryTodos, (res) => {
-      setTodos(res.docs.map((todo):any => ({...todo.data(), id: todo.id})))
-      logging.info("Database updated")
+      setTodos(res.docs.map((todo): any => ({ ...todo.data(), id: todo.id })));
+      logging.info("Database updated");
     });
-    return unsub
+    return unsub;
   }, []);
 
   const todosDisplay = todos
-    .sort((a, b) => dayjs(b.creationDate).diff(dayjs(a.creationDate)))
+    .sort(
+      (a, b) =>
+        dayjs(b.creationDate, "DD/MM/YYYY HH/mm/ss").toDate().valueOf() -
+        dayjs(a.creationDate, "DD/MM/YYYY HH/mm/ss").toDate().valueOf()
+    )
     .filter((todo) => !todo.done)
-    .map((todo) => (
-      <DisplayTodo todo={todo} key={todo.id} />
-    ));
+    .map((todo) => <DisplayTodo todo={todo} key={todo.id} />);
 
   const doneTodosDisplay = todos
-    .sort((a, b) => dayjs(b.creationDate).diff(dayjs(a.creationDate)))
+    .sort(
+      (a, b) =>
+      dayjs(b.creationDate, "DD/MM/YYYY HH/mm/ss").toDate().valueOf() -
+      dayjs(a.creationDate, "DD/MM/YYYY HH/mm/ss").toDate().valueOf()
+    )
     .filter((todo) => todo.done)
-    .map((todo) => (
-      <DisplayTodo todo={todo} key={todo.id} />
-    ));
+    .map((todo) => <DisplayTodo todo={todo} key={todo.id} />);
 
   return (
     <Box sx={{ p: 0, m: 0, width: 1 }}>
       <Header user={user} />
-      <CreateTodo
-        user={user}
-        todos={todos}
-      />
-      <Accordion sx={{margin: 3}} expanded={todos.filter((todo) => !todo.done).length ? true : false}>
+      <CreateTodo user={user} todos={todos} />
+      <Accordion
+        sx={{ margin: 3 }}
+        expanded={todos.filter((todo) => !todo.done).length ? true : false}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -71,8 +78,8 @@ export default function TodoApp({ user }: Props) {
           <List>{todosDisplay}</List>
         </AccordionDetails>
       </Accordion>
-      
-      <Accordion sx={{margin: 3}}>
+
+      <Accordion sx={{ margin: 3 }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -84,7 +91,6 @@ export default function TodoApp({ user }: Props) {
           <List>{doneTodosDisplay}</List>
         </AccordionDetails>
       </Accordion>
-      
     </Box>
   );
 }

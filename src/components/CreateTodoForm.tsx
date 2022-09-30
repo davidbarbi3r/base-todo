@@ -41,8 +41,8 @@ export default function CreateTodo({ user, todos }: Props) {
     const newTodo: ITodo = {
       userId: user ? user.uid : "",
       text: data.get("text") ? data.get("text")?.toString() : "",
-      creationDate: dayjs(Date.now()).format("DD/MM/YYYY"),
-      echeanceDate: echeanceDate ? echeanceDate.format("DD/MM/YYYY") : null,
+      creationDate: dayjs(Date.now()).format("DD/MM/YYYY HH/mm/ss"),
+      echeanceDate: echeanceDate ? echeanceDate.format("DD/MM/YYYY HH/mm/ss") : null,
       done: false,
       important: data.get("important") ? true : false,
       urgent: data.get("urgent") ? true : false,

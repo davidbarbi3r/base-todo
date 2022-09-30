@@ -20,6 +20,7 @@ import { useState } from "react";
 import { doc, deleteDoc } from "firebase/firestore";
 import { database } from "../config/config";
 import { crud } from "../controllers/CRUDcontrollers";
+import dayjs from "dayjs";
 
 type Props = {
   todo: ITodo;
@@ -58,7 +59,7 @@ export default function DisplayTodo({ todo }: Props) {
               <ListItemText
                 sx={todo.done? {textDecoration: "line-through"} : {}}
                 primary={todo.text}
-                secondary={`Limit date: ${todo.echeanceDate}  Type: ${todo.type}`}
+                secondary={`Creation date: ${todo.creationDate.split(" ")[0]} | Limit date: ${todo.echeanceDate?.split(' ')[0]}`}
               >
               </ListItemText>
               {todo.important && (
@@ -71,6 +72,13 @@ export default function DisplayTodo({ todo }: Props) {
                   label="important"
                 />
               )}
+              <Chip
+                  sx={{ marginRight: "2em" }}
+                  variant="outlined"
+                  color="info"
+                  size="small"
+                  label={todo.type as string}
+                />
             </>
           )}
           <Grid display={"flex"} alignItems={"right"}></Grid>
