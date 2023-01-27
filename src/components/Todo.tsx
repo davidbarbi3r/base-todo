@@ -19,7 +19,7 @@ import PriorityHighIcon from "@mui/icons-material/PriorityHigh";
 import { useState } from "react";
 import { doc, deleteDoc } from "firebase/firestore";
 import { database } from "../config/config";
-import { crud } from "../controllers/CRUDcontrollers";
+import { todoCRUD } from "../controllers/CRUDcontrollers";
 import dayjs from "dayjs";
 
 type Props = {
@@ -43,7 +43,7 @@ export default function DisplayTodo({ todo }: Props) {
             control={
               <Checkbox
                 checked={todo.done}
-                onChange={(e) => crud.update(editedTodo, setEdit, todo.id, e)}
+                onChange={(e) => todoCRUD.update(editedTodo, setEdit, todo.id, e)}
               />
             }
             label=""
@@ -89,7 +89,7 @@ export default function DisplayTodo({ todo }: Props) {
             aria-label="outlined button group"
           >
             {edit ? (
-              <Button onClick={() => crud.update(editedTodo, setEdit, todo.id)}>
+              <Button onClick={() => todoCRUD.update(editedTodo, setEdit, todo.id)}>
                 <SaveAltOutlinedIcon />
               </Button>
             ) : (
@@ -98,7 +98,7 @@ export default function DisplayTodo({ todo }: Props) {
             <Button onClick={() => setEdit((prev) => !prev)}>
               <EditIcon />
             </Button>
-            <Button onClick={() => crud.delete(todo.id)}>
+            <Button onClick={() => todoCRUD.delete(todo.id)}>
               <DeleteIcon />
             </Button>
           </ButtonGroup>

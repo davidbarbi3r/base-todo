@@ -9,3 +9,4 @@ export default interface ITodo {
     id: string
     type: FormDataEntryValue | null
 }
+

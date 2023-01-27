@@ -20,7 +20,7 @@ import {
   FormLabel
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import { crud } from "../controllers/CRUDcontrollers";
+import { todoCRUD } from "../controllers/CRUDcontrollers";
 import ITodo from "../interface/todo";
 import { DataArraySharp } from "@mui/icons-material";
 
@@ -50,7 +50,7 @@ export default function CreateTodo({ user, todos }: Props) {
       type: data.get("type") ? data.get("type") : "other"
     };
 
-    crud.create(newTodo);
+    todoCRUD.create(newTodo);
     form.current && form.current.reset();
   };
 

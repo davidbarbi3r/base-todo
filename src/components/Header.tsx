@@ -6,6 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import PermIdentityOutlinedIcon from "@mui/icons-material/PermIdentityOutlined";
 import PersonOffOutlinedIcon from "@mui/icons-material/PersonOffOutlined";
+import * as XLSX from "xlsx";
+import { excelCRUD } from "../controllers/CRUDcontrollers";
 
 interface Props {
   user: User | null;
@@ -29,6 +31,25 @@ export default function Header({ user }: Props) {
     } else {
       navigate("/login");
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = e.target?.result;
+        if (data) {
+          const workbook = XLSX.read(data, { type: "binary" });
+          const sheetName = workbook.SheetNames[0];
+          const sheet = workbook.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(sheet);
+          console.log(json);
+          excelCRUD.post(json);
+        }
+      };
+      reader.readAsBinaryString(file);
+    };
   };
 
   return (
@@ -69,6 +90,15 @@ export default function Header({ user }: Props) {
             </Typography>
             {user?.displayName && <Typography marginLeft={2} variant="body2">{user?.displayName}</Typography>}
           </Box>
+          <Button variant="contained" color="warning" component="label">
+            UPLOAD FILE
+            <input id="upload-excel" hidden accept=".xlsx" multiple type="file" onChange={(e) => {
+              handleFileChange(e);
+             }}/>
+          </Button>
+          <Button variant="contained" color="warning" onClick={() => navigate("/")} sx={{ml:2}}>
+            EXPORT FILE
+          </Button>
           <Button color="inherit" onClick={() => handleLogout(auth, user)}>
             {user ? <PersonOffOutlinedIcon /> : <PermIdentityOutlinedIcon />}
           </Button>
